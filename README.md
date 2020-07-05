@@ -2,3 +2,4 @@
 
 ## Deploy
 
+https://gpturismo.herokuapp.com/
