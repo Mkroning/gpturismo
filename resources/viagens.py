@@ -16,7 +16,7 @@ def listagemViagem():
 
 @viagens.route('/viagens', methods=['POST'])
 # Quando colocar o login descomentar essa linha
-# @jwt_required
+@jwt_required
 @cross_origin()
 def cadastroViagem():
     viagem = Viagem.from_json(request.json)

@@ -26,25 +26,4 @@ class Interesse(db.Model):
     nome = json_interesses.get('nome')
     idExcursoes = json_interesses.get('idExcursoes')
     return Interesse(email=email, nome=nome, idExcursoes=idExcursoes)
-
-  @classmethod
-  def find_interesse(cls, id):
-    interesse = cls.query.filter_by(id=id).first()
-    if interesse:
-      return interesse
-    return None
-  
-  def save_interesse(self):
-    db.session.add(self)
-    db.session.commit()
-
-  def update_interesse(self, email, nome, idExcursoes):
-    self.email = email
-    self.nome = nome
-    self.idExcursoes = idExcursoes
-
-  def delete_interesse(self):
-    db.session.delete(self)
-    db.session.commit()
-    
     
