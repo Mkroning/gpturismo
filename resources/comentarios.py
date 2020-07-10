@@ -39,7 +39,7 @@ def alteracaoComentarios(idComentarios):
 
 @comentarios.route('/comentarios/<int:idComentarios>')
 @cross_origin()
-def getByIdExcursao(idComentarios):
+def getByIdComentario(idComentarios):
     comentario = Comentario.query.get_or_404(idComentarios)
     return jsonify(comentario.to_json()), 200 
 

@@ -55,6 +55,27 @@ def pesquisaCidade(cidade):
         return jsonify({'id': 0, 'message': 'Nenhuma viagem registrada para essa cidade'}), 400 
 
 
+@viagens.route('/viagens/estatisticas')
+def maior():
+    totalViagens = Viagem.query.count()
+    m = Viagem.query.order_by(Viagem.valor.desc()).limit(1).all()
+    mn = Viagem.query.order_by(Viagem.valor.asc()).limit(1).all()
+    maior = {
+        'id': m[0].idViagens,
+        'valor': m[0].valor,
+        'tipoViagem': m[0].tipoViagem
+        }
+    menor = {
+        'id': mn[0].idViagens,
+        'valor': mn[0].valor,
+        'tipoViagem': mn[0].tipoViagem
+        }
+    lista = []
+    lista.append({'totalViagens': totalViagens, 'maior': maior, 'menor': menor})
+    
+    return jsonify(lista), 201
+
+
 @viagens.route('/viagens/<int:idViagens>', methods=['DELETE'])
 @cross_origin()
 def exclui(idViagens):

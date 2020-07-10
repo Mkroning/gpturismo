@@ -31,18 +31,27 @@ def alteracaoExcursao(idExcursoes):
     excursao = Excursao.query.get_or_404(idExcursoes)
     excursao.dataPartida = request.json['dataPartida']
     excursao.dataChegada = request.json['dataChegada']
-    excursao.detalheExcursoes = request.json['detalheExcursoes'] 
-    excursao.idViagens = request.json['idViagens'] 
+    excursao.detalheExcursoes = request.json['detalheExcursoes']
+    excursao.foto = request.json['foto']
+    excursao.idViagens = request.json['idViagens']
     db.session.add(excursao)
     db.session.commit()
-    return jsonify(excursao.to_json()), 201   
+    return jsonify(excursao.to_json()), 201
 
 
 @excursoes.route('/excursoes/<int:idExcursoes>')
 @cross_origin()
 def getByIdExcursao(idExcursoes):
     excursao = Excursao.query.get_or_404(idExcursoes)
-    return jsonify(excursao.to_json()), 200   
+    return jsonify(excursao.to_json()), 200
+
+
+@excursoes.route('/excursoes/viagem/<int:idViagens>')
+@cross_origin()
+def getByIdViagens(idViagens):
+    excursoes = Excursao.query.order_by(Excursao.idExcursoes).filter(Excursao.idViagens.like(f'%{idViagens}%')).all()
+    if len(excursoes):
+        return jsonify([excursao.to_json() for excursao in excursoes]) 
 
 
 @excursoes.route('/excursoes/<int:idExcursoes>', methods=['DELETE'])
@@ -55,4 +64,4 @@ def exclui(idExcursoes):
 
 @excursoes.errorhandler(404)
 def id_invalido(error):
-    return jsonify({'id': 0, 'message': 'Excursão não encontrada'}), 404 
+    return jsonify({'id': 0, 'message': 'Excursão não encontrada'}), 404

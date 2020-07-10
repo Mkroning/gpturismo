@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request
 from banco import db
 from models.modelViagensParadas import ViagensParada
+from models.modelParada import Parada
 from flask_cors import CORS, cross_origin
 # from flask_jwt_extended import jwt_required
 
 viagensParadas = Blueprint('viagensParadas', __name__)
+paradas = Blueprint('paradas', __name__)
 
 
 @viagensParadas.route('/viagensParadas')
@@ -34,6 +36,30 @@ def alteracaoParadas(idViagensParadas):
     db.session.add(viagensParada)
     db.session.commit()
     return jsonify(viagensParada.to_json()), 201 
+
+
+@viagensParadas.route('/viagensParadas/<int:idViagensParadas>')
+@cross_origin()
+def getByIdViagensParadas(idViagensParadas):
+    viagensParadas = ViagensParada.query.get_or_404(idViagensParadas)
+    return jsonify([viagensParada.to_json() for viagensParada in viagensParadas]), 200 
+
+
+@viagensParadas.route('/viagensParadas/paradas/<int:idViagens>')
+@cross_origin()
+def pesquisaTodasParadas(idViagens):
+    viagensParadas = ViagensParada.query.order_by(ViagensParada.idViagens).filter(ViagensParada.idViagens.like(f'%{idViagens}%')).all()
+    # viagensParadas = ViagensParada.query.order_by(ViagensParada.idViagens).filter(ViagensParada.idViagens).all()
+    num = 0
+    lista = []
+    for viagensParada in viagensParadas:
+        print(num)
+        parada = Parada.query.get_or_404(viagensParadas[num].idParadas)
+        lista.append({'idViagensParadas': viagensParadas[num].idViagensParadas,'idParadas': parada.idParadas, 'nome': parada.nome, 'localizacao': parada.localizacao, 'horario': parada.horario})
+        num = num +1
+
+    print(lista)
+    return jsonify(lista) 
 
 
 @viagensParadas.route('/viagensParadas/<int:idViagensParadas>', methods=['DELETE'])

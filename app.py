@@ -9,6 +9,7 @@ from resources.paradas import paradas
 from resources.comentarios import comentarios
 from resources.viagensParadas import viagensParadas
 from resources.usuarios import usuarios
+from resources.interesses import interesses
 from blacklist import blacklist
 from flask_jwt_extended import JWTManager
 
@@ -24,6 +25,7 @@ app.register_blueprint(paradas)
 app.register_blueprint(comentarios)
 app.register_blueprint(viagensParadas)
 app.register_blueprint(usuarios)
+app.register_blueprint(interesses)
 
 # with app.app_context():
 #     api = Api(app)
