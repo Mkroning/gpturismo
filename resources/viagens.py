@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from banco import db
 from flask_cors import CORS, cross_origin
 from models.modelViagem import Viagem
+from models.modelExcursao import Excursao
 from flask_jwt_extended import jwt_required
 
 viagens = Blueprint('viagens', __name__)
@@ -16,7 +17,7 @@ def listagemViagem():
 
 @viagens.route('/viagens', methods=['POST'])
 # Quando colocar o login descomentar essa linha
-@jwt_required
+# @jwt_required
 @cross_origin()
 def cadastroViagem():
     viagem = Viagem.from_json(request.json)
@@ -38,12 +39,14 @@ def alteracaoViagem(idViagens):
     db.session.add(viagem)
     db.session.commit()
     return jsonify(viagem.to_json()), 200   
+    
 
 @viagens.route('/viagens/<int:idViagens>')
 @cross_origin()
 def getByIdViagens(idViagens):
     viagem = Viagem.query.get_or_404(idViagens)
     return jsonify(viagem.to_json()), 200   
+
 
 @viagens.route('/viagens/excursoes/<cidade>')
 @cross_origin()
@@ -80,6 +83,7 @@ def maior():
 @cross_origin()
 def exclui(idViagens):
     Viagem.query.filter_by(idViagens=idViagens).delete()
+    Excursao.query.filter_by(idViagens=idViagens).delete()
     db.session.commit()
     return jsonify({'id': idViagens, 'message': 'Viagem excluída com sucesso'}), 200
 

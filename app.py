@@ -8,8 +8,8 @@ from resources.viagens import viagens
 from resources.paradas import paradas
 from resources.comentarios import comentarios
 from resources.viagensParadas import viagensParadas
-from resources.usuarios import usuarios
 from resources.interesses import interesses
+from resources.usuarios import usuarios
 from blacklist import blacklist
 from flask_jwt_extended import JWTManager
 
